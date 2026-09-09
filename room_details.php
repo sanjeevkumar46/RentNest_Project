@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-include "config/db.php";
-include "includes/header.php";
-include "includes/navbar.php";
+include "../config/db.php";
+include "../includes/header.php";
+include "../includes/navbar.php";
 
 if (!isset($_GET['id'])) {
-    header("Location: index.php");
+    header("Location: rooms.php");
     exit();
 }
 
@@ -18,7 +18,7 @@ $result = mysqli_query($conn, $sql);
 
 if (!$result || mysqli_num_rows($result) == 0) {
     echo "<h2 style='text-align:center;'>Room Not Found</h2>";
-    include "includes/footer.php";
+    include "../includes/footer.php";
     exit();
 }
 
@@ -30,7 +30,7 @@ $row = mysqli_fetch_assoc($result);
     <div class="room-card" style="max-width:700px;margin:auto;">
 
         <img
-            src="uploads/<?php echo $row['image']; ?>"
+            src="../uploads/<?php echo $row['image']; ?>"
             alt="Room"
         >
 
@@ -67,7 +67,7 @@ $row = mysqli_fetch_assoc($result);
         </p>
 
 
-        <!-- ROOM AVAILABILITY -->
+        <!-- ROOM STATUS -->
 
         <?php if ($row['status'] == "available") { ?>
 
@@ -75,10 +75,9 @@ $row = mysqli_fetch_assoc($result);
                 ✅ Available
             </p>
 
-            <?php if (isset($_SESSION['user_id']) && $_SESSION['role'] == "user") { ?>
+            <?php if (isset($_SESSION['user_id'])) { ?>
 
                 <a href="book_room.php?room_id=<?php echo $row['id']; ?>">
-
                     <button
                         style="
                             background:#2563eb;
@@ -86,20 +85,15 @@ $row = mysqli_fetch_assoc($result);
                             width:100%;
                             padding:15px;
                             font-size:18px;
-                            border:none;
-                            border-radius:8px;
-                            cursor:pointer;
                         "
                     >
                         🏠 Book This Room
                     </button>
-
                 </a>
 
-            <?php } elseif (!isset($_SESSION['user_id'])) { ?>
+            <?php } else { ?>
 
-                <a href="login.php">
-
+                <a href="../login.php">
                     <button
                         style="
                             background:#2563eb;
@@ -107,14 +101,10 @@ $row = mysqli_fetch_assoc($result);
                             width:100%;
                             padding:15px;
                             font-size:18px;
-                            border:none;
-                            border-radius:8px;
-                            cursor:pointer;
                         "
                     >
                         Login to Book
                     </button>
-
                 </a>
 
             <?php } ?>
@@ -155,12 +145,10 @@ $row = mysqli_fetch_assoc($result);
 
         <br>
 
-        <a href="index.php">
-
+        <a href="rooms.php">
             <button>
-                ← Back to Home
+                ← Back to Rooms
             </button>
-
         </a>
 
     </div>
@@ -168,5 +156,5 @@ $row = mysqli_fetch_assoc($result);
 </section>
 
 <?php
-include "includes/footer.php";
+include "../includes/footer.php";
 ?>
